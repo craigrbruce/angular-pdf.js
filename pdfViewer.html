@@ -1,0 +1,37 @@
+<div style="margin-top: -35px;">
+    <div class="row" ng-show="pdf != null">
+        <div class="col-md-2 thumbnailColumn" style="max-height: 1000px; overflow: auto">
+            <ul class="list-inline">
+                <li ng-repeat="thumb in thumbnails">
+                    <button ng-class="thumbnailClass(thumb)" ng-click="onSelectThumb(thumb)">
+                        <canvas id="thumbnail-{{thumb.pageNumber}}"></canvas>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-10" id="pdf-container">
+            <div class="row pdfToolbar">
+                <button ng-disabled="currentPageNumber <= 1" class="btn" ng-click="prevPage()"><i
+                        class="glyphicon glyphicon-arrow-left"></i></button>
+                <button ng-disabled="currentPageNumber >= totalPages" class="btn" ng-click="nextPage()"><i
+                        class="glyphicon glyphicon-arrow-right"></i></button>
+                <label>Page:</label>
+                <input type="number" class="number" ng-model="currentPageNumber" min="0" ng-change="onNumberChanged()">
+                <span>/{{totalPages}}</span>
+                <button ng-disabled="item.allowPrint == false" type="button" class="btn" ng-click="printPdf()"><i
+                        class="glyphicon glyphicon-print"></i>
+                </button>
+                <div class="pull-right">
+                    <label>Size:</label>
+                    <select ng-model="scale" ng-options="s.name for s in scaleOptions"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div id="thumbnailView">
+                </div>
+                <canvas id="pdf-viewer" width="700px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+

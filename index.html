@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Viewer</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        .thumbnail{
+            margin-top: 10px;
+            margin-left: 40px;
+        }
+
+        .thumbnail.highlight{
+            background-color: hsla(0,0%,100%,.3);
+            background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+            background-clip: padding-box;
+            box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+            0 0 1px hsla(0,0%,100%,.1) inset,
+            0 0 1px hsla(0,0%,0%,.2);
+            color: hsla(0,0%,100%,1);
+        }
+
+        .thumbnail.fade{
+            transition-duration: 150ms;
+            border: 1px solid transparent;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+            opacity: 0.8;
+            z-index: 99;
+        }
+
+        .thumbnailColumn{
+            background-color: #474747;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body ng-app>
+<pdf-viewer>
+
+</pdf-viewer>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+<script src="lib/pdf.js"></script>
+<script src="lib/pdf.worker.js"></script>
+<script src="lib/compatibility.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+</body>
+</html>
