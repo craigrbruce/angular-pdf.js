@@ -100,6 +100,7 @@
                             //then on the next $digest, render in the thumbnails and printables.
                             $timeout(function () {
                                 $("#print-container").html('');
+                                var frame = createIframe();
                                 for (var i = 0; i < pdf.numPages + 1; i++) {
                                     //noinspection JSHint
                                     (function (pageNumber) {
@@ -110,7 +111,7 @@
                                                 $(printable).addClass('printable-canvas');
                                                 printable.id = 'printable-' + pageNumber;
                                                 renderViewport(page, printable, 1);
-                                                var frame = createIframe();
+
                                                 //firefox needs this prod:
                                                 $timeout(function () {
                                                     $(frame.contentDocument.body).append(printable);
