@@ -19,11 +19,11 @@
                 $scope.totalPages = 0;
                 $scope.pdf = null;
                 $scope.thumbnails = [];
-                $scope.allowPrint = false;
+                $scope.allowPrint = false; // or true .. the choice is yours
                 PDFJS.workerSrc = 'lib/pdf.worker.js';
 
                 $scope.printPdf = function () {
-                    var iframe = getIframe();
+                    var iframe =  document.getElementById('print-frame');
                     var contentFrame = iframe.contentWindow || iframe;
                     contentFrame.focus();
                     $timeout(function () {
@@ -110,7 +110,7 @@
                                                 $(printable).addClass('printable-canvas');
                                                 printable.id = 'printable-' + pageNumber;
                                                 renderViewport(page, printable, 1);
-                                                var frame = getIframe();
+                                                var frame = createIframe();
                                                 //firefox needs this prod:
                                                 $timeout(function () {
                                                     $(frame.contentDocument.body).append(printable);
@@ -124,7 +124,7 @@
                         });
                 })();
 
-                function getIframe() {
+                function createIframe() {
                     var iframe = document.getElementById('print-frame');
                     if (!iframe) {
                         iframe = document.createElement('iframe');
@@ -132,7 +132,7 @@
                         $(iframe).attr('style', 'margin-left: -1000px');
                         $(document.body).append(iframe);
                     }  else{
-                       $(iframe).empty();
+                        $(iframe.contentDocument.body).empty();
                     }
                     return iframe;
                 }
