@@ -1,10 +1,11 @@
 (function (ns) {
-    "use strict";
-    ns.app.directive('pdfViewer', ['$timeout', function ($timeout) {
+
+    ns.app = angular.module('pdf', ["ngSanitize", "ngResource", "ngRoute"])
+        .directive('pdfViewer', ['$timeout', function ($timeout) {
 
         //real world: you will probably need to dynamically generate the URL or get it from another component
         function getContentUrl() {
-            return "test.pdf";;
+            return "test.pdf";
         }
 
         return {
