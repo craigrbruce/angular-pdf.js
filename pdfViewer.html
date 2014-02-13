@@ -1,37 +1,53 @@
-<div style="margin-top: -35px;">
-    <div class="row" ng-show="pdf != null">
-        <div class="col-md-2 thumbnailColumn" style="max-height: 1000px; overflow: auto">
-            <ul class="list-inline">
-                <li ng-repeat="thumb in thumbnails">
-                    <button ng-class="thumbnailClass(thumb)" ng-click="onSelectThumb(thumb)">
-                        <canvas id="thumbnail-{{thumb.pageNumber}}"></canvas>
-                    </button>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-10" id="pdf-container">
-            <div class="row pdfToolbar">
-                <button ng-disabled="currentPageNumber <= 1" class="btn" ng-click="prevPage()"><i
-                        class="glyphicon glyphicon-arrow-left"></i></button>
-                <button ng-disabled="currentPageNumber >= totalPages" class="btn" ng-click="nextPage()"><i
-                        class="glyphicon glyphicon-arrow-right"></i></button>
-                <label>Page:</label>
-                <input type="number" class="number" ng-model="currentPageNumber" min="0" ng-change="onNumberChanged()">
-                <span>/{{totalPages}}</span>
-                <button ng-disabled="item.allowPrint == false" type="button" class="btn" ng-click="printPdf()"><i
-                        class="glyphicon glyphicon-print"></i>
-                </button>
-                <div class="pull-right">
-                    <label>Size:</label>
-                    <select ng-model="scale" ng-options="s.name for s in scaleOptions"></select>
-                </div>
+<div class="container">
+    <div class="pdfWrapper">
+        <div ng-show="pdf != null">
+            <div class="hidden-sm hidden-xs col-md-2 thumbnailColumn">
+                <ul class="list-inline">
+                    <li ng-repeat="thumb in thumbnails">
+                        <button ng-class="thumbnailClass(thumb)" ng-click="onSelectThumb(thumb)">
+                            <canvas style="width:220px;" id="thumbnail-{{thumb.pageNumber}}"></canvas>
+                        </button>
+                    </li>
+                </ul>
             </div>
-            <div class="row">
+            <div class="col-md-10" id="pdf-container">
+                <div class="pdfToolbar">
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <button ng-disabled="currentPageNumber <= 1" class="btn btn-default btn-sm"
+                                    ng-click="prevPage()"><i class="glyphicons left_arrow"></i></button>
+                            <button ng-disabled="currentPageNumber >= totalPages" class="btn btn-default btn-sm"
+                                    ng-click="nextPage()"><i class="glyphicons right_arrow"></i></button>
+
+                            <label class="hidden-sm hidden-xs">Page:</label>
+                            <input style="width:60px;" type="number"
+                                   class="hidden-sm hidden-xs number form-control input-sm" ng-model="currentPageNumber"
+                                   min="0" ng-change="onNumberChanged()">
+                            <span class="hidden-sm hidden-xs">/{{totalPages}}</span>
+
+                            <label>Size:</label>
+                            <select style="width:105px;" class="form-control input-sm" ng-model="scale"
+                                    ng-options="s.name for s in scaleOptions"></select>
+                            <button tooltip="Print" tooltip-placement="bottom" ng-disabled="item.allowPrint == false"
+                                    type="button" class="btn btn-default btn-sm" ng-click="printPdf()"><i
+                                    class="glyphicons print"></i></button>
+                        </div>
+                        <button tooltip="Close" tooltip-placement="bottom" class="btn btn-danger btn-sm float-right"
+                                ng-click="goBack()"><i class="glyphicons remove_2"></i></button>
+                    </form>
+                </div>
+
                 <div id="thumbnailView">
                 </div>
-                <canvas id="pdf-viewer" width="700px"></canvas>
+
+                <div class="container-main">
+                    <div class="container-canvas">
+                        <canvas id="pdf-viewer" width="800" height="480"></canvas>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-</div>
 
+</div>

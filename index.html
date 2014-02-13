@@ -3,37 +3,94 @@
 <head>
     <title>PDF Viewer</title>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="glyphicons.css" type="text/css" rel="stylesheet"/>
     <style>
-        .thumbnail{
-            margin-top: 10px;
-            margin-left: 40px;
-        }
 
-        .thumbnail.highlight{
-            background-color: hsla(0,0%,100%,.3);
-            background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+        .darkBg {
+            background: #474747!important;
+        }
+        .pdfWrapper .form-control {
+            display: inline;
+        }
+        .pdfWrapper .float-right {
+            float: right;
+            position: absolute;
+            right: 0;
+            top: 3px;
+        }
+        #pdf-container,
+        .pdfWrapper {
+            background: #474747;
+        }
+        .thumbnail {
+            margin: 10px 0 0 10px;
+        }
+        .thumbnail.highlight {
+            background-color: rgba(255, 255, 255, 0.3);
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
             background-clip: padding-box;
-            box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
-            0 0 1px hsla(0,0%,100%,.1) inset,
-            0 0 1px hsla(0,0%,0%,.2);
-            color: hsla(0,0%,100%,1);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 0 1px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
         }
-
-        .thumbnail.fade{
+        .thumbnail.fade {
             transition-duration: 150ms;
             border: 1px solid transparent;
             box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
             opacity: 0.8;
             z-index: 99;
         }
-
-        .thumbnailColumn{
-            background-color: #474747;
+        .thumbnailColumn {
+            background: #474747;
             overflow: auto;
         }
+        .pdfToolbar {
+            position: relative;
+            height: 44px;
+            background: #474747;
+            border-bottom: 1px solid #5B5B5B;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+        .pdfToolbar label,
+        .pdfToolbar span {
+            color: #fff;
+            margin: 6px 0 0 0;
+        }
+        .pdfToolbar label {
+            margin: 6px 0 0 10px;
+        }
+        .container-canvas,
+        .thumbnailColumn {
+            overflow-y: scroll;
+        }
+        .container-canvas {
+            height: 925px;
+        }
+        .thumbnailColumn {
+            height: 969px;
+        }
+        .view-container {
+            position: relative;
+        }
+        .view-frame.ng-enter,
+        .view-frame.ng-leave {
+            background: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+        .view-frame.ng-enter {
+            -webkit-animation: 0.8s fade-in;
+            -moz-animation: 0.8s fade-in;
+            -o-animation: 0.8s fade-in;
+            animation: 0.8s fade-in;
+            z-index: 100;
+        }
+
     </style>
 </head>
-<body ng-app="pdf">
+<body ng-app="pdf" class="darkBg">
 <div class="container">
     <pdf-viewer>
 
