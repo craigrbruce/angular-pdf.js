@@ -1,7 +1,7 @@
 (function (ns) {
 
     ns.app = angular.module('pdf', ["ngSanitize", "ngResource", "ngRoute"])
-        .directive('pdfViewer', ['$timeout', function ($timeout) {
+        .directive('pdfViewer', ['$timeout', '$q', function ($timeout, $q) {
 
         //real world: you will probably need to dynamically generate the URL or get it from another component
         function getContentUrl() {
@@ -14,6 +14,7 @@
             transclude: true,
             templateUrl: 'pdfViewer.html',
             link: function ($scope) {
+                var render_timout = null;
                 $scope.item = null;
                 $scope.currentPageNumber = 1;
                 $scope.currentPage = null;
@@ -139,13 +140,46 @@
                     return iframe;
                 }
 
+                function toggleToolsDisabled(disabled) { //for the benefit of s#!t browsers. And yes, I tried ng-disabled .. #fail
+                    $("#pdf-back-button").attr('disabled', disabled);
+                    $("#pdf-forward-button").attr('disabled', disabled);
+                    $("#pdf-page-select").attr('disabled', disabled);
+                    $("#pdf-scale-select").attr('disabled', disabled);
+                    $(".thumbnail").attr('disabled', disabled);
+                    $(".list-inline").attr('disabled', disabled);
+                }
+
                 function renderPage() {
+                    render_timout && $timeout.cancel(render_timout);
+                    render_timout = $timeout(function () {
+                        $("#pdf-page-loading").fadeIn('slow');
+                        $("#pdf-viewer-container").hide();
+                        toggleToolsDisabled(true);
+                        renderMainView()
+                            .then(function () {
+                                $("#pdf-viewer-container").slideDown('fast');
+                                $("#pdf-page-loading").hide();
+                                toggleToolsDisabled(false);
+                            },
+                            function () {
+                                $("#pdf-page-loading").hide();
+                                toggleToolsDisabled(false);
+                            });
+                    }, 500);
+                }
+
+                function renderMainView() {
+                    var dfd = $q.defer();
                     $scope.pdf && $scope.pdf.getPage($scope.currentPageNumber)
                         .then(function (page) {
-                            $scope.currentPage = page;
-                            var canvas = $("#pdf-viewer")[0];
-                            renderViewport(page, canvas, getScale(page));
+                            ns.safeApply($scope, function () {
+                                $scope.currentPage = page;
+                                var canvas = $("#pdf-viewer")[0];
+                                renderViewport($scope.currentPage, canvas, getScale($scope.currentPage))
+                                    .then(dfd.resolve);
+                            });
                         });
+                    return dfd.promise;
                 }
 
                 function clearContext(ctx, canvas) {
@@ -156,17 +190,31 @@
                 }
 
                 function renderViewport(page, canvas, scale) {
+                    var dfd = $q.defer();
                     var viewport = page.getViewport(scale);
                     var context = canvas.getContext('2d');
-                    clearContext(context, canvas);
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+                    ns.safeApply($scope, function () {
+                        clearContext(context, canvas);
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
 
-                    var renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
-                    page.render(renderContext);
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        var task = page.render(renderContext);
+
+                        if (task) {
+                            task.promise.then(function () {
+                                dfd.resolve();
+                            });
+                        }
+                        else {
+                            dfd.resolve();
+                        }
+                    });
+
+                    return dfd.promise;
                 }
 
                 function getScale(page) {
