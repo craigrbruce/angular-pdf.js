@@ -1,6 +1,8 @@
 angular-pdf.js
 ==============
 
+# This code is gnarly as hell and obsolete, but I left it here for s#!!$ and giggles .. also posterity and junk
+
 a directive for angular js to render pdfs with Mozilla's pdf.js
 
 ## Mac
